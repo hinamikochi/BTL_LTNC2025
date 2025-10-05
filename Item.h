@@ -6,7 +6,9 @@
 enum ItemType {
     TYPE_UNKNOWN, // Loại mặc định
     TYPE_GOLD,
-    TYPE_STONE
+    TYPE_STONE,
+    TYPE_DIAMOND,
+    TYPE_GIFT
 };
 
 class Item {

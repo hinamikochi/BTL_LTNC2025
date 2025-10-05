@@ -26,7 +26,7 @@ public:
             textureId = "stone_normal";
             break;
         case LARGE:
-            rect = { x, y, 64, 64 };
+            rect = { x, y, 70, 70 };
             score = 50;
             weight = 3.0f;
             textureId = "stone_large";

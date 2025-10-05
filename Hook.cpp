@@ -35,9 +35,8 @@ void Hook::attach(Item* item) {
     retracting = true;
 }
 
-void Hook::update(float dt) {
-    // Không cần cập nhật ox ở đây nữa vì nó đã được khởi tạo và không đổi
-    // ox = Game::SCREEN_W / 2;
+Item* Hook::update(float dt) {
+    Item* collectedItem = nullptr; // Biến để lưu vật phẩm vừa thu thập được
 
     if (!extending && !retracting && !attached) {
         // idle: quay qua lại
@@ -52,7 +51,7 @@ void Hook::update(float dt) {
         int tx = int(ox + length * std::cos(angle));
         int ty = int(oy + length * std::sin(angle));
 
-        if (tx < 0 || tx > Game::SCREEN_W || ty > Game::SCREEN_H || length > 800) { // Tăng giới hạn chiều dài
+        if (tx < 0 || tx > Game::SCREEN_W || ty > Game::SCREEN_H || length > 800) {
             extending = false;
             retracting = true;
         }
@@ -63,29 +62,25 @@ void Hook::update(float dt) {
 
         length -= spd * dt;
 
-        // ⭐ BẮT ĐẦU SỬA LỖI: Cập nhật vị trí vật phẩm
         if (attached) {
-            // 1. Tính toán vị trí của đầu sợi dây (rope tip)
             int tx = (int)(ox + length * std::cos(angle));
             int ty = (int)(oy + length * std::sin(angle));
-
-            // 2. Cập nhật vị trí của vật phẩm
-            // để "điểm bị móc trúng" trên vật phẩm di chuyển theo đầu dây
             attached->rect.x = (int)(tx - attached->rect.w / 2.0f - attached->hookOffsetX);
             attached->rect.y = (int)(ty - attached->rect.h / 2.0f - attached->hookOffsetY);
         }
-        // ⭐ KẾT THÚC SỬA LỖI
 
         if (length <= 40.0f) {
             length = 40.0f;
             retracting = false;
             if (attached) {
-                attached->collected = true;
-                attached->beingPulled = false;
+                // Thay vì chỉ xóa, chúng ta gán nó vào biến để trả về
+                collectedItem = attached;
                 attached = nullptr;
             }
         }
     }
+
+    return collectedItem; // Trả về vật phẩm đã thu thập (hoặc nullptr nếu không có)
 }
 
 void Hook::render() {

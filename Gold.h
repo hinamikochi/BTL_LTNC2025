@@ -31,7 +31,7 @@ public:
         case LARGE:
             textureId = "gold_large";
             score = 250;
-            weight = 2.0f;
+            weight = 3.0f;
             break;
         }
 
@@ -41,8 +41,8 @@ public:
 
         // Giảm kích thước của vàng to một chút cho cân đối
         if (size == LARGE) {
-            rect.w = int(texW * 0.7f);
-            rect.h = int(texH * 0.7f);
+            rect.w = int(texW * 0.9f);
+            rect.h = int(texH * 0.9f);
         }
 
         collected = false;
