@@ -7,13 +7,32 @@
 #include "Item.h"
 #include "Gold.h"
 #include "Stone.h"
-#include "Diamond.h" 
-#include "Gift.h" 
+#include "Diamond.h"
+#include "Gift.h"
 
-// Enum để quản lý trạng thái của game
+// Enum quản lý trạng thái game
 enum GameState {
     START_SCREEN,
-    PLAYING
+    LEVEL_START,
+    PLAYING,
+    PAUSED, 
+    LEVEL_END,
+    GAME_WON,
+    GAME_OVER
+};
+
+// Struct định nghĩa thông tin mỗi màn chơi
+struct LevelData {
+    int goal;
+    int time;
+    int minGoldSmall, maxGoldSmall;
+    int minGoldNormal, maxGoldNormal;
+    int minGoldLarge, maxGoldLarge;
+    int minStoneSmall, maxStoneSmall;
+    int minStoneNormal, maxStoneNormal;
+    int minStoneLarge, maxStoneLarge;
+    int minDiamond, maxDiamond;
+    int minGift, maxGift;
 };
 
 class Game {
@@ -34,40 +53,52 @@ public:
 private:
     SDL_Window* window;
     bool isRunning;
+    GameState gameState;
+    Uint32 lastTick;
 
     // Các biến cho màn hình khởi động
-    GameState gameState;
     TTF_Font* font;
     SDL_Texture* startTextTexture;
     SDL_Rect startTextRect;
-
-    // Các biến cho hiệu ứng chớp nháy
     bool isStartTextVisible;
     float blinkTimer;
 
-    // Biến cho âm thanh
+    // Âm thanh
     Mix_Music* gStartMusic;
-    Mix_Chunk* mStartSound;
-
     Mix_Music* gGameplayMusic;
     Mix_Chunk* mClawFireSound;
     Mix_Chunk* mItemHitSound;
     Mix_Chunk* mItemCollectSound;
     Mix_Chunk* mStartClickSound;
 
-    // Biến cho nút mute
+    // Nút mute
     bool isMuted;
     SDL_Rect muteButtonRect;
 
-    // 
+    // HUD và gameplay
     TTF_Font* mHudFont;
     int mLevelGoal;
     float mTimeLeft;
-
-    // Các biến cho gameplay
-    std::vector<Item*> items;
     int score;
-    Uint32 lastTick;
+    std::vector<Item*> items;
 
-    void loadItems();
+    // Hệ thống màn chơi
+    int mCurrentLevel;
+    std::vector<LevelData> mLevelConfigs;
+    float mStateTimer;
+    SDL_Texture* mLevelPassTexture;
+    SDL_Rect mLevelPassRect;
+    SDL_Texture* mLevelFailTexture;
+    SDL_Rect mLevelFailRect;
+
+    //  BIẾN PAUSE MENU 
+    SDL_Rect pauseButtonRect; 
+    SDL_Rect pauseMenuRect;   
+    SDL_Rect resumeButtonRect; 
+    SDL_Rect mainMenuButtonRect; 
+
+
+    // Hàm helper
+    void generateItemsForLevel(int level);
+    void resetForNewLevel(int level);
 };

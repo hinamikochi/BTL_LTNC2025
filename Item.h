@@ -1,10 +1,11 @@
 ﻿#pragma once
 #include <SDL.h>
 #include <string>
+#include "TextureManager.h"
 
 // Định nghĩa các loại vật phẩm chính
 enum ItemType {
-    TYPE_UNKNOWN, // Loại mặc định
+    TYPE_UNKNOWN, 
     TYPE_GOLD,
     TYPE_STONE,
     TYPE_DIAMOND,
@@ -13,7 +14,7 @@ enum ItemType {
 
 class Item {
 public:
-    // Các biến cũ
+    // Các biến của bạn
     SDL_Rect rect;
     bool collected;
     bool beingPulled;
@@ -21,18 +22,21 @@ public:
     float weight;
     std::string textureId;
     ItemType type;
-
-    // ⭐ THÊM VÀO: Các biến mới cho chức năng móc câu
-    float hookOffsetX, hookOffsetY; // Vị trí móc so với tâm vật phẩm
-    float currentHookAngle;        // Góc của móc lúc va chạm
+    float hookOffsetX, hookOffsetY;
+    float currentHookAngle;
 
     // constructor & destructor
     Item(int x, int y, int w, int h, const std::string& tex, int sc, float wt);
     virtual ~Item() = default;
 
-    // ⭐ THÊM VÀO: Hàm mới để ghi lại dữ liệu va chạm
+    // Hàm của bạn
     void setHookData(float hookAngle, float itemCenterX, float itemCenterY, float hookTipX, float hookTipY);
-
-    // hàm vẽ
     virtual void render();
+
+    
+    const SDL_Rect& getRect() const;
+    int getValue() const;
+    void setPosition(int x, int y);
+    bool isCaught() const;
+    void setCaught(bool isCaught);
 };

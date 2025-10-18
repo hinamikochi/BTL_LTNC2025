@@ -4,13 +4,13 @@
 class Stone : public Item {
 public:
     enum Size { SMALL, NORMAL, LARGE };
-    Size size; // ⭐ THÊM VÀO: Biến để lưu kích thước đá
+    Size size; 
 
     Stone(int x, int y, Size sz)
-        : Item(0, 0, 0, 0, "", 0, 0.0f) // Gọi tạm cha
+        : Item(0, 0, 0, 0, "", 0, 0.0f) 
     {
-        type = TYPE_STONE; // ⭐ THÊM VÀO: Gán loại là ĐÁ
-        size = sz;         // ⭐ THÊM VÀO: Lưu lại kích thước
+        type = TYPE_STONE; 
+        size = sz;         
 
         switch (size) {
         case SMALL:

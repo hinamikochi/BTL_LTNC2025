@@ -6,13 +6,13 @@
 class Gold : public Item {
 public:
     enum Size { SMALL, NORMAL, LARGE };
-    Size size; // ⭐ THÊM VÀO: Biến để lưu kích thước vàng
+    Size size; 
 
     Gold(int x, int y, Size sz)
-        : Item(0, 0, 0, 0, "", 0, 0.0f) // Gọi tạm cha
+        : Item(0, 0, 0, 0, "", 0, 0.0f) 
     {
-        type = TYPE_GOLD; // ⭐ THÊM VÀO: Gán loại là VÀNG
-        size = sz;        // ⭐ THÊM VÀO: Lưu lại kích thước
+        type = TYPE_GOLD; 
+        size = sz;        
 
         SDL_Texture* tex = nullptr;
         int texW = 0, texH = 0;
@@ -39,7 +39,7 @@ public:
         if (tex) SDL_QueryTexture(tex, nullptr, nullptr, &texW, &texH);
         rect = { x, y, texW, texH };
 
-        // Giảm kích thước của vàng to một chút cho cân đối
+        
         if (size == LARGE) {
             rect.w = int(texW * 0.9f);
             rect.h = int(texH * 0.9f);

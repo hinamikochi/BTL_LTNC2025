@@ -5,10 +5,10 @@
 class Gift : public Item {
 public:
     Gift(int x, int y)
-        // <<< SỬA ĐỔI Ở ĐÂY: Gọi hàm Item() với đúng 7 tham số >>>
+        
         : Item(x, y, 40, 40, "gift_bag", getRandomScore(), 1.0f)
     {
-        // Gán giá trị 'type' ở bên trong thân hàm
+        
         this->type = TYPE_GIFT;
     }
 

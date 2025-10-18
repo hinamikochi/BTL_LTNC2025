@@ -9,9 +9,9 @@ public:
     static bool Load(const std::string& id, const std::string& fileName);
     static void Draw(const std::string& id, int x, int y, int w, int h);
 
-    // ⭐ THAY ĐỔI Ở DÒNG DƯỚI ĐÂY ⭐
+   
     static void DrawEx(const std::string& id, int x, int y, int w, int h,
-        double angleDeg = 0.0, const SDL_Rect* srcRect = nullptr,  // Thêm tham số này vào giữa
+        double angleDeg = 0.0, const SDL_Rect* srcRect = nullptr,  
         SDL_Point* center = nullptr,
         SDL_RendererFlip flip = SDL_FLIP_NONE);
 

@@ -15,18 +15,17 @@ public:
     float getAngle() const { return angle; }
     bool isExtending() const { return extending; }
 
+    
+    void reset();
+
 private:
     Hook();
-
-    float angle;      // radians
-    float length;     // độ dài dây
-    int ox, oy;       // origin
-
-    float speedOut;    // tốc độ bung dây
-    float baseSpeedIn; // tốc độ thu cơ bản
-
+    float angle;
+    float length;
+    int ox, oy;
+    float speedOut;
+    float baseSpeedIn;
     bool extending;
     bool retracting;
-
     Item* attached;
 };

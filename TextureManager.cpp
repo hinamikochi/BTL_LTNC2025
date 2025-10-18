@@ -1,5 +1,5 @@
 ﻿#include "TextureManager.h"
-#include "Game.h" // Giả sử bạn có Game.h để lấy Game::renderer
+#include "Game.h" 
 #include <SDL_image.h>
 #include <iostream>
 
@@ -24,21 +24,17 @@ void TextureManager::Draw(const std::string& id, int x, int y, int w, int h) {
     }
 }
 
-// =================== HÀM ĐÃ ĐƯỢC CHỈNH SỬA ===================
 void TextureManager::DrawEx(const std::string& id, int x, int y, int w, int h,
     double angleDeg, const SDL_Rect* srcRect, SDL_Point* center, SDL_RendererFlip flip)
 {
     SDL_Rect destRect = { x, y, w, h };
     SDL_Texture* tex = Get(id);
 
-    // Kiểm tra xem texture có tồn tại không
+    
     if (tex) {
-        // Tham số thứ 3 của SDL_RenderCopyEx là source rectangle.
-        // Trước đây nó là `nullptr`, bây giờ nó là `srcRect` bạn truyền vào.
         SDL_RenderCopyEx(Game::renderer, tex, srcRect, &destRect, angleDeg, center, flip);
     }
 }
-// =============================================================
 
 void TextureManager::Clear() {
     for (auto& p : textures) {

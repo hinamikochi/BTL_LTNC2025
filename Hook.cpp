@@ -9,12 +9,21 @@ Hook& Hook::getInstance() {
 }
 
 Hook::Hook() {
-    ox = Game::SCREEN_W / 2.0f;
-    oy = 25 + (128 / 3.0f); // Sửa lại theo playerY = 3
+    ox = Game::SCREEN_W / 2;
+    oy = 25 + (128 / 3);
     angle = (float)(PI / 2.0);
     speedOut = 500.0f;
     baseSpeedIn = 250.0f;
     length = 40.0f;
+    extending = false;
+    retracting = false;
+    attached = nullptr;
+}
+
+//  THÊM PHẦN THÂN CHO HÀM RESET
+void Hook::reset() {
+    length = 40.0f;
+    angle = (float)(PI / 2.0);
     extending = false;
     retracting = false;
     attached = nullptr;
@@ -29,28 +38,31 @@ void Hook::fire() {
 void Hook::attach(Item* item) {
     attached = item;
     if (attached) {
-        attached->beingPulled = true;
+        // Thay vì gán trực tiếp, gọi hàm setHookData của item
+        float itemCenterX = item->rect.x + item->rect.w / 2.0f;
+        float itemCenterY = item->rect.y + item->rect.h / 2.0f;
+        float hookTipX = ox + length * std::cos(angle);
+        float hookTipY = oy + length * std::sin(angle);
+        item->setHookData((float)angle, itemCenterX, itemCenterY, hookTipX, hookTipY);
     }
     extending = false;
     retracting = true;
 }
 
 Item* Hook::update(float dt) {
-    Item* collectedItem = nullptr; // Biến để lưu vật phẩm vừa thu thập được
+    Item* collectedItem = nullptr;
 
     if (!extending && !retracting && !attached) {
-        // idle: quay qua lại
         static float t = 0.0f;
         t += dt;
-        float freq = 1.0f;
-        float amplitude = (float)(PI / 2.0 - 0.05);
+        float freq = 1.5f;
+        float amplitude = (float)(65 * PI / 180);
         angle = (float)(PI / 2.0 + amplitude * std::sin(t * freq));
     }
     else if (extending) {
         length += speedOut * dt;
         int tx = int(ox + length * std::cos(angle));
         int ty = int(oy + length * std::sin(angle));
-
         if (tx < 0 || tx > Game::SCREEN_W || ty > Game::SCREEN_H || length > 800) {
             extending = false;
             retracting = true;
@@ -59,62 +71,48 @@ Item* Hook::update(float dt) {
     else if (retracting) {
         float spd = baseSpeedIn;
         if (attached) spd = baseSpeedIn / attached->weight;
-
         length -= spd * dt;
 
         if (attached) {
             int tx = (int)(ox + length * std::cos(angle));
             int ty = (int)(oy + length * std::sin(angle));
-            attached->rect.x = (int)(tx - attached->rect.w / 2.0f - attached->hookOffsetX);
-            attached->rect.y = (int)(ty - attached->rect.h / 2.0f - attached->hookOffsetY);
+            // Cập nhật vị trí item dựa trên dữ liệu hook đã lưu
+            float itemCenterX = tx - attached->hookOffsetX;
+            float itemCenterY = ty - attached->hookOffsetY;
+            attached->rect.x = (int)(itemCenterX - attached->rect.w / 2.0f);
+            attached->rect.y = (int)(itemCenterY - attached->rect.h / 2.0f);
         }
 
         if (length <= 40.0f) {
             length = 40.0f;
             retracting = false;
             if (attached) {
-                // Thay vì chỉ xóa, chúng ta gán nó vào biến để trả về
                 collectedItem = attached;
                 attached = nullptr;
             }
         }
     }
-
-    return collectedItem; // Trả về vật phẩm đã thu thập (hoặc nullptr nếu không có)
+    return collectedItem;
 }
 
 void Hook::render() {
-    // Vẽ dây câu (giữ nguyên)
     int ropeTextureW = 50;
-    int ropeTextureH = 64;
     float renderAngleDeg = (float)(angle * 180.0 / PI - 90.0);
     SDL_Point pivot = { ropeTextureW / 2, 0 };
-    int render_x = (int)(ox - pivot.x + 0.5f);
-    int render_y = (int)(oy - pivot.y + 0.5f);
-    TextureManager::DrawEx("rope", render_x, render_y, ropeTextureW, (int)length, renderAngleDeg, nullptr, &pivot, SDL_FLIP_NONE);
+    TextureManager::DrawEx("rope", (int)(ox - pivot.x), oy, ropeTextureW, (int)length, renderAngleDeg, nullptr, &pivot);
 
-    // Chỉ vẽ móc câu chính khi nó chưa gắp được gì
     if (!attached) {
-        // ⭐ BẮT ĐẦU SỬA: Lấy kích thước thật của ảnh móc câu
-        // 1. Lấy texture của móc câu
         SDL_Texture* hookTex = TextureManager::Get("hook");
         int hookW = 0, hookH = 0;
-
-        // 2. Lấy kích thước thật của texture đó
         if (hookTex) {
             SDL_QueryTexture(hookTex, nullptr, nullptr, &hookW, &hookH);
         }
-
-        hookW *= 0.8f;
-        hookH *= 0.8f;
-
-        // 3. Tính toán vị trí và vẽ với kích thước thật
+        hookW = int(hookW * 0.8f);
+        hookH = int(hookH * 0.8f);
         int tx = int(ox + length * std::cos(angle));
         int ty = int(oy + length * std::sin(angle));
         SDL_Point hookCenter = { hookW / 2, hookH / 2 };
-
-        TextureManager::DrawEx("hook", tx - hookW / 2, ty - hookH / 2, hookW, hookH, renderAngleDeg, nullptr, &hookCenter, SDL_FLIP_NONE);
-        // ⭐ KẾT THÚC SỬA
+        TextureManager::DrawEx("hook", tx - hookW / 2, ty - hookH / 2, hookW, hookH, renderAngleDeg, nullptr, &hookCenter);
     }
 }
 
