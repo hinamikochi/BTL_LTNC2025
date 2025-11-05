@@ -27,7 +27,8 @@ isStartTextVisible(true), blinkTimer(0.0f), gStartMusic(nullptr),
 gGameplayMusic(nullptr), mClawFireSound(nullptr), mItemHitSound(nullptr), mItemCollectSound(nullptr), mStartClickSound(nullptr),
 isMuted(false), mHudFont(nullptr), mLevelGoal(0), mTimeLeft(0.0f),
 mCurrentLevel(1), mStateTimer(0.0f), mLevelPassTexture(nullptr), mLevelFailTexture(nullptr)
-{}
+{
+}
 
 Game::~Game() {
     clean();
@@ -57,8 +58,8 @@ bool Game::init(const char* title, int width, int height) {
     SDL_FreeSurface(textSurface);
 
     TextureManager::Load("level_board", "assets/waitScreen.png");
-    TextureManager::Load("winner", "assets/GameOverBack.png");
-    TextureManager::Load("game_over", "assets/gameover.png");
+    TextureManager::Load("winner", "assets/wingame.jpg");
+    TextureManager::Load("game_over", "assets/lose.jpg");
 
     SDL_Color black = { 0, 0, 0, 255 };
     SDL_Surface* passSurface = TTF_RenderText_Blended(font, "Ban da vuot qua!", black);
@@ -92,6 +93,9 @@ bool Game::init(const char* title, int width, int height) {
     mItemCollectSound = Mix_LoadWAV("assets/GetReward.ogg");
     mStartClickSound = Mix_LoadWAV("assets/Click.wav");
 
+    mGameWonSound = Mix_LoadWAV("assets/win.wav");
+    mGameOverSound = Mix_LoadWAV("assets/lose.mp3");
+
     TextureManager::Load("background", "assets/bg.png");
     TextureManager::Load("background2", "assets/bg2.png");
     TextureManager::Load("player", "assets/player.png");
@@ -108,11 +112,11 @@ bool Game::init(const char* title, int width, int height) {
     TextureManager::Load("gift_bag", "assets/SurpriseBag.png");
 
     //------------------------Goal-time---GS----GN------GB----SS------SN----SB-----D------G--//
-    mLevelConfigs.push_back({ 1200, 60,  4, 6,  2, 3,  1, 2,  2, 4,  1, 2,  1,2,  0, 0,  1, 1 });  
-    mLevelConfigs.push_back({ 2300, 60,  5, 7,  3, 4,  2, 3,  3, 5,  2, 3,  2,3,  0, 0,  1, 2 });  
-    mLevelConfigs.push_back({ 3500, 55,  6, 8,  3, 5,  2, 3,  3, 4,  2, 4,  3,4,  1, 3,  1, 2 });  
-    mLevelConfigs.push_back({ 4500, 55,  5, 9,  4, 6,  3, 4,  4, 6,  3, 5,  3,4,  2, 4,  2, 3 });  
-    mLevelConfigs.push_back({ 5500, 50,  6, 10, 5, 7,  3, 5,  5, 7,  4, 7,  3,4,  3, 5,  2, 3 }); 
+    mLevelConfigs.push_back({ 1000, 60,  4, 6,  2, 3,  1, 2,  2, 4,  1, 2,  1,2,  0, 0,  1, 1 });
+    mLevelConfigs.push_back({ 2500, 60,  5, 7,  3, 4,  2, 3,  3, 5,  2, 3,  2,3,  0, 0,  1, 2 });
+    mLevelConfigs.push_back({ 3800, 55,  6, 8,  3, 5,  2, 3,  3, 4,  2, 4,  3,4,  1, 3,  1, 2 });
+    mLevelConfigs.push_back({ 6000, 55,  5, 9,  4, 6,  3, 4,  4, 6,  3, 5,  3,4,  2, 4,  2, 3 });
+    mLevelConfigs.push_back({ 8000, 50,  6, 10, 5, 7,  3, 5,  5, 7,  4, 7,  3,4,  3, 5,  2, 3 });
 
     isRunning = true;
     lastTick = SDL_GetTicks();
@@ -247,11 +251,15 @@ void Game::handleEvents() {
                     break;
                 case LEVEL_END:
                     if (score >= mLevelGoal) {
-                        if (mCurrentLevel >= mLevelConfigs.size()) gameState = GAME_WON;
+                        if (mCurrentLevel >= mLevelConfigs.size()) {
+                            gameState = GAME_WON;
+                            if (!isMuted) Mix_PlayChannel(-1, mGameWonSound, 0);
+                        }
                         else resetForNewLevel(mCurrentLevel + 1);
                     }
                     else {
                         gameState = GAME_OVER;
+                        if (!isMuted) Mix_PlayChannel(-1, mGameOverSound, 0);
                     }
                     break;
                 case GAME_WON:

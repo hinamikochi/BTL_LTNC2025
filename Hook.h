@@ -15,7 +15,7 @@ public:
     float getAngle() const { return angle; }
     bool isExtending() const { return extending; }
 
-    
+
     void reset();
 
 private:

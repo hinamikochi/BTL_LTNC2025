@@ -70,6 +70,8 @@ private:
     Mix_Chunk* mItemHitSound;
     Mix_Chunk* mItemCollectSound;
     Mix_Chunk* mStartClickSound;
+    Mix_Chunk* mGameWonSound;
+    Mix_Chunk* mGameOverSound;
 
     // Nút mute
     bool isMuted;

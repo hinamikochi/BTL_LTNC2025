@@ -12,7 +12,7 @@ Hook::Hook() {
     ox = Game::SCREEN_W / 2;
     oy = 25 + (128 / 3);
     angle = (float)(PI / 2.0);
-    speedOut = 500.0f;
+    speedOut = 600.0f;
     baseSpeedIn = 250.0f;
     length = 40.0f;
     extending = false;
@@ -76,6 +76,7 @@ Item* Hook::update(float dt) {
         if (attached) {
             int tx = (int)(ox + length * std::cos(angle));
             int ty = (int)(oy + length * std::sin(angle));
+
             // Cập nhật vị trí item dựa trên dữ liệu hook đã lưu
             float itemCenterX = tx - attached->hookOffsetX;
             float itemCenterY = ty - attached->hookOffsetY;

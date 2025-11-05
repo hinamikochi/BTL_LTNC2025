@@ -14,7 +14,7 @@ enum ItemType {
 
 class Item {
 public:
-    // Các biến của bạn
+   // Các biến
     SDL_Rect rect;
     bool collected;
     bool beingPulled;
@@ -25,11 +25,12 @@ public:
     float hookOffsetX, hookOffsetY;
     float currentHookAngle;
 
+
     // constructor & destructor
     Item(int x, int y, int w, int h, const std::string& tex, int sc, float wt);
     virtual ~Item() = default;
 
-    // Hàm của bạn
+    
     void setHookData(float hookAngle, float itemCenterX, float itemCenterY, float hookTipX, float hookTipY);
     virtual void render();
 
