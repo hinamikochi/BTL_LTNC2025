@@ -1,4 +1,4 @@
-# ⛏️ Gold Miner
+#  Gold Miner
 Đây là bản game Gold Miner (đào vàng) mà mọi người chắc đã từng chơi khi còn đi học, được code đầu bằng C++ có sử dụng thư viện SDL2.
 
 
@@ -11,11 +11,11 @@
 ![Ảnh chụp màn hình game Gold Miner](https://github.com/user-attachments/assets/ac690127-971a-4e2e-99c6-406c48d7cfb6)
 
 
-## 📜 Mô tả
+##  Mô tả
 
 Luật chơi đơn giản: người chơi sẽ vào vai một thợ mỏ cố gắng gắp đủ số vàng mục tiêu trước khi hết thời gian để qua màn.
 
-## ✨ Các tính năng chính
+##  Các tính năng chính
 
 * **Cách chơi:** Thả móc để gắp vàng, đá, và các vật phẩm giá trị.
 * **Hệ thống màn chơi:** Game có 5 màn chơi với độ khó và mục tiêu tăng dần.
@@ -24,13 +24,13 @@ Luật chơi đơn giản: người chơi sẽ vào vai một thợ mỏ cố g�
 * **Hệ thống UI:** Hiển thị Điểm, Mục tiêu, Thời gian, và Màn chơi.
 * **Chức năng:** Tạm dừng (Pause), Tắt/Mở âm thanh (Mute).
 
-## 🎮 Cách chơi
+##  Cách chơi
 
 * Nhấn phím **SPACE** để thả móc.
 * Móc sẽ tự động kéo vật thể lên khi chạm vào.
 * Cố gắng đạt được số tiền **Mục tiêu (Goal)** trước khi **Thời gian (Time)** chạy về 0.
 
-## 🛠️ Môi trường và thư viện
+##  Môi trường và thư viện
 
 * **Ngôn ngữ:** C++
 * **Thư viện:** [SDL2](https://www.libsdl.org/) (để xử lý đồ họa, cửa sổ và sự kiện)
@@ -40,7 +40,7 @@ Luật chơi đơn giản: người chơi sẽ vào vai một thợ mỏ cố g�
     * [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/) (để xử lý âm thanh)
 * **Môi trường:** Visual Studio 2022
 
-## ⚙️ Hướng dẫn Cài đặt & Chạy (Tùy chọn)
+##  Hướng dẫn Cài đặt & Chạy (Tùy chọn)
 
 1.  Clone repository này về máy.
 2.  Mở project bằng Visual Studio 2022.
